@@ -62,11 +62,35 @@ class Logout(Resource) :
         return {}, 401
 
 
+class Tasks(Resource) :
+    def get (self) :
+        tasks = Task.query.all()
+
+        return TaskSchema(many=True).dump(tasks)
+
+    def post(self) :
+        task = Task(
+            name = request.get_json()['name'],
+            description = request.get_json()['description'],
+            mark_as_compete = request.get_json()['mark_as_complete'],
+            user_id = session['user_id']
+        )
+
+        try :
+            db.session.add(task)
+            db.session.commit()
+            return TaskSchema().dump(task)
+
+        except IntegrityError :
+            return {'error' : '401 Unauthorized'}, 422
+
+
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Logout, '/logout', endpoint='logout')
+api.add_resource(Tasks, '/tasks', endpoint='tasks')
 
 if __name__ == '__main__' :
     app.run(port=5555, debug=True)
