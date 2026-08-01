@@ -7,6 +7,14 @@ from models import User, Task
 from schema import UserSchema, TaskSchema
 
 
+@app.before_request
+def check_if_logged_in() :
+    open_access = ['signup', 'login', 'check_session']
+
+    if (request.endpoint) not in open_access and (not session.get('user_id')) :
+        return {"error" : "401 Unauthorized"}, 401
+    
+
 class Signup(Resource) :
     def post(self) :
 
@@ -58,8 +66,11 @@ class CheckSession(Resource) :
 
 class Logout(Resource) :
     def post (self) :
-        session['user_id'] = None
-        return {}, 401
+       if session.get('user_id') :
+            session['user_id'] = None
+            return {}, 204
+       else :
+           return {}, 401
 
 
 class Tasks(Resource) :
