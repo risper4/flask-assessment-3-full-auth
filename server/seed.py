@@ -1,4 +1,4 @@
-from random import choice 
+from random import choice as rc
 
 from faker import Faker
 
@@ -15,7 +15,7 @@ with app.app_context() :
     User.query.delete()
     Task.query.delete()
 
-    fake = faker()
+    fake = Faker()
 
     print('Create users...')
 
@@ -31,7 +31,7 @@ with app.app_context() :
         usernames.append(username)
 
         user = User(username=username)
-        user.password_hash = choice(passwords)
+        user.password_hash = rc(passwords)
 
         users.append(user)
 
@@ -41,14 +41,14 @@ with app.app_context() :
     print('Print passwords...')
     tasks = []
 
-    tasks.append(Task(name='Cook supper', description='Go to bed early', mark_as_commplete=True, user_id=2))
-    tasks.append(Task(name='Wash the dishes', description='Fix the dishwasher', mark_as_commplete=False, user_id=2))
-    tasks.append(Task(name='Buy groceries', description='Go to carefour', mark_as_commplete=True, user_id=2))
-    tasks.append(Task(name='Walk Simba to the park', description='Go to the park', mark_as_commplete=False, user_id=2))
-    tasks.append(Task(name='Meet up with Ryan', description='Be at Parkinton hotel', mark_as_commplete=False, user_id=2))
+    tasks.append(Task(name='Cook supper', description='Go to bed early', mark_as_complete=True, user_id=3))
+    tasks.append(Task(name='Wash the dishes', description='Fix the dishwasher', mark_as_complete=False, user_id=1))
+    tasks.append(Task(name='Buy groceries', description='Go to carefour', mark_as_complete=True, user_id=2))
+    tasks.append(Task(name='Walk Simba to the park', description='Go to the park', mark_as_complete=False, user_id=2))
+    tasks.append(Task(name='Meet up with Ryan', description='Be at Parkinton hotel', mark_as_complete=False, user_id=4))
 
     db.session.add_all(tasks)
 
-    print('Commiting users and tasks')
+    print('Commiting users and tasks to the database')
     db.session.commit()
     print('Complete')
