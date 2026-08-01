@@ -28,6 +28,23 @@ class Signup(Resource) :
 
 
 
+class Login(Resource) :
+    def post(self) :
+        username = request.get_json()['username']
+
+        user = User.query.filter(User.username == username).first()
+
+        password = request.get_json()['password']
+
+        if user and user.authenticate(password):
+            session['user_id'] = user.id
+            return UserSchema().dump(user)
+
+        else :
+            return {'error' : 'Unauthorized access'}, 401
+
+
+
 api.add_resource(Signup, '/signup', endpoint='signup')
 
 if __name__ == '__main__' :
