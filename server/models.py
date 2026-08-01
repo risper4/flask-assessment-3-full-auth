@@ -30,3 +30,14 @@ class User(db.Model) :
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+
+
+
+class Task(db.Model) :
+    __tablename__ = 'tasks'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=True)
+    description = db.Column(db.String)
+    marked_as_complete = db.Column(db.Boolean, default=False)
