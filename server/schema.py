@@ -11,5 +11,5 @@ class TaskSchema(Schema) :
     id = fields.Integer()
     name = fields.String()
     description = fields.String()
-    marked_as_complete = fields.Boolean()
+    mark_as_complete = fields.Boolean()
     user = fields.Nested(lambda : UserSchema(exclude=('tasks', )))
