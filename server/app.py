@@ -86,11 +86,42 @@ class Tasks(Resource) :
 
 
 
+class TaskById(Resource) :
+    def patch(self, id) :
+        task = Task.query.filter(Task.id == id).first()
+
+        if task.user_id != session['user_id'] :
+            return {'error' : 'Task cannot be found'}, 400
+
+        else :
+            data = request.get_json()
+
+            for key,value in data.items() :
+                if hasattr(task, key) :
+                    setattr(task, key, value)
+
+            db.session.commit()
+            return TaskSchema().dump(task), 200
+
+    def delete(self, id) :
+        task = Task.query.filter(Task.id == id).first()
+
+        if task.user_id ==  session['user_id'] :
+            return {'error' : 'Task cannot be found'}, 400
+
+        else :
+            db.session.delete()
+            db.session.commit()
+            return {'error' : '403 Forbidden'}, 403
+
+
+
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(Tasks, '/tasks', endpoint='tasks')
+api.add_resource(TaskById, '/tasks/<int:id>', endpoint='tasks/<int:id>')
 
 if __name__ == '__main__' :
     app.run(port=5555, debug=True)
