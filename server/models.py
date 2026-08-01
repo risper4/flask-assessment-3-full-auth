@@ -48,9 +48,9 @@ class Task(db.Model) :
     user = db.relationship('User', back_populates='tasks')
 
     __table_args__ = (
-        db.CheckConstraint('length(description) <= 500'),
+        db.CheckConstraint('length(description) <= 300'),
     )
 
-    
+
     def __repr__(self):
         return f'<Post {self.id} : {self.name}>'

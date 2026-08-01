@@ -4,6 +4,12 @@ class UserSchema(Schema) :
     id = fields.Integer()
     username = fields.String()
 
-    posts = fields.List(fields.Nested(lambda : TaskSchema(exclude=('user',))))
+    tasks = fields.List(fields.Nested(lambda : TaskSchema(exclude=('user',))))
 
 
+class TaskSchema(Schema) :
+    id = fields.Integer()
+    name = fields.String()
+    description = fields.String()
+    marked_as_complete = fields.Boolean()
+    user = fields.Nested(lambda : UserSchema(exclude=('tasks', )))
