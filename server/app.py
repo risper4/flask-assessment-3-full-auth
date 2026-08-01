@@ -1,6 +1,6 @@
 from flask import request, session
 from flask_restful import Resource
-from sqlalchemy import IntegrityError
+from sqlalchemy.exc import IntegrityError
 
 from config import app, api, db
 
