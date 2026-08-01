@@ -41,11 +41,25 @@ class Login(Resource) :
             return UserSchema().dump(user)
 
         else :
-            return {'error' : 'Unauthorized access'}, 401
+            return {'error' : '401 Unauthorized'}, 401
+
+
+
+class CheckSession(Resource) :
+    def check_session(self) :
+        if session.get('user_id') :
+            user = User.query.filter(User.id == session['user_id']).first()
+
+            return UserSchema().dump(user), 200
+
+        else :
+            return {'error' : '401 Unauthorized'}
 
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 
 if __name__ == '__main__' :
     app.run(port=5555, debug=True)
