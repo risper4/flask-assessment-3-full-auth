@@ -42,7 +42,7 @@ class Task(db.Model) :
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=True)
     description = db.Column(db.String)
-    marked_as_complete = db.Column(db.Boolean, default=False)
+    mark_as_complete = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     user = db.relationship('User', back_populates='tasks')
