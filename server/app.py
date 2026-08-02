@@ -75,9 +75,21 @@ class Logout(Resource) :
 
 class Tasks(Resource) :
     def get (self) :
-        tasks = Task.query.all()
+        # tasks = Task.query.all()
+        # return TaskSchema(many=True).dump(tasks)
 
-        return TaskSchema(many=True).dump(tasks)
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 5, type=int)
+
+        pagination = Task.query.paginate(page=page, per_page=per_page, error_out=False)
+
+        return {
+            'page' : pagination.page,
+            'per_page' : pagination.per_page,
+            'total' : pagination.total,
+            'total_pages' : pagination.pages,
+            'items' : [TaskSchema().dump(task) for task in pagination.items]
+        }
 
     def post(self) :
         task = Task(
