@@ -89,7 +89,7 @@ class Tasks(Resource) :
             'total' : pagination.total,
             'total_pages' : pagination.pages,
             'items' : [TaskSchema().dump(task) for task in pagination.items]
-        }
+        },200
 
     def post(self) :
         task = Task(
